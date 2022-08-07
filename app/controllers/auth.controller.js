@@ -48,7 +48,7 @@ exports.signup = (req, res) => {
                return
             }
 
-            user.roles = [role._id]
+            user.role = [role._id]
             user.save(err => {
                if (err) {
                   res.status(500).send({ message: err })
