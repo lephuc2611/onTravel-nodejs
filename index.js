@@ -6,7 +6,6 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const dbConfig = require('./app/config/db.config')
 const mongoString = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
-const routes = require('./app/routes/routes')
 
 const db = require("./app/models")
 const Role = db.role
@@ -44,9 +43,6 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
    console.log(`Server started at ${PORT}`);
 })
-
-app.use('/api', routes)
-
 
 function initial() {
    Role.estimatedDocumentCount((err, count) => {
