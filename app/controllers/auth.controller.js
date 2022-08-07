@@ -8,9 +8,10 @@ var bcrypt = require('bcryptjs')
 
 exports.signup = (req, res) => {
    const user = new User({
-      username: req.body.username,
+      userName: req.body.userName,
       email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8)
+      password: bcrypt.hashSync(req.body.password, 8),
+      roles: req.body.roles
    })
 
    user.save((err, user) => {
@@ -18,11 +19,10 @@ exports.signup = (req, res) => {
          res.status(500).send({ message: err })
          return
       }
-
       if (req.body.roles) {
          Role.find(
             {
-               name: { $in: req.body.roles }
+               name: { $in: req.body.roles[0] }
             },
             (err, roles) => {
                if (err) {
@@ -30,12 +30,13 @@ exports.signup = (req, res) => {
                   return
                }
 
-               user.roles = roles.map(role => role._id);
+               user.role = roles.map(role => role._id);
                user.save(err => {
                   if (err) {
-                  res.status(500).send({ message: err });
-                  return;
+                     res.status(500).send({ message: err });
+                     return;
                   }
+                  console.log(req.body.roles[0]);
                   res.send({ message: "User was registered successfully!" });
                });
             }
